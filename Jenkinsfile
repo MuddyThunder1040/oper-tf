@@ -4,33 +4,37 @@ pipeline {
     }
 
     parameters {
-        string(name: 'Git-Branch', defaultValue: 'main', description: "Git branch to build")
-        choice(name: 'Terraform-Operation', choices: ['plan', 'apply', 'destroy', 'show'], description: "Terraform operation to perform")
+        string(name: 'Git-Branch', defaultValue: 'main', description: "Branch to checkout from tf_modules repo")
+        choice(name: 'TF_Module', choices: ['Local', 'prod', 'dev'], description: "Terraform Module to run")
+        choice(name: 'Terraform-Operation', choices: ['plan', 'apply', 'destroy', 'show'], description: "Terraform operation to run")
     }
 
     stages {
-        stage('Git Checkout') {
+        stage('Clone Terraform Repo') {
             steps {
+                deleteDir()
                 git branch: "${params['Git-Branch']}", url: 'https://github.com/MuddyThunder1040/tf_modules.git'
             }
         }
 
-        stage('Terraform operation') {
+        stage('Run Terraform') {
             steps {
-                script {
-                    def operation = params['Terraform-Operation']
-                    sh 'terraform init'
+                dir("${params['TF_Directory']}") {
+                    script {
+                        def op = params['Terraform-Operation']
+                        sh 'terraform init'
 
-                    if (operation == 'plan') {
-                        sh 'terraform plan'
-                    } else if (operation == 'apply') {
-                        sh 'terraform apply -auto-approve'
-                    } else if (operation == 'destroy') {
-                        sh 'terraform destroy -auto-approve'
-                    } else if (operation == 'show') {
-                        sh 'terraform show'
-                    } else {
-                        error "Invalid Terraform operation: ${operation}"
+                        if (op == 'plan') {
+                            sh 'terraform plan'
+                        } else if (op == 'apply') {
+                            sh 'terraform apply -auto-approve'
+                        } else if (op == 'destroy') {
+                            sh 'terraform destroy -auto-approve'
+                        } else if (op == 'show') {
+                            sh 'terraform show'
+                        } else {
+                            error "Unsupported Terraform operation: ${op}"
+                        }
                     }
                 }
             }
