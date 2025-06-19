@@ -19,7 +19,7 @@ pipeline {
 
         stage('Run Terraform') {
             steps {
-                dir("${params['TF_Directory']}") {
+                dir("${params['TF_Module']}") {
                     script {
                         def op = params['Terraform-Operation']
                         sh 'terraform init'
