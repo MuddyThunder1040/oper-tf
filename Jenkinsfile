@@ -5,8 +5,7 @@ pipeline {
 
     parameters {
         string(name: 'Git-Branch', defaultValue: 'main', description: "Branch to checkout from tf_modules repo")
-        // Scan the repo for available modules and populate the choices dynamically
-        choice(name: 'TF_Module', choices: sh(script: "ls -d */ | sed 's#/##' | tr '\\n' ',' | sed 's/,\$//'", returnStdout: true).trim(), description: "Terraform module to run (e.g., Local, Azure, AWS, GCP)")
+        string(name: 'TF_Module', defaultValue: 'Local', description: "Terraform Module to run")
         choice(name: 'Terraform-Operation', choices: ['plan', 'apply', 'destroy', 'show'], description: "Terraform operation to run")
     }
 
