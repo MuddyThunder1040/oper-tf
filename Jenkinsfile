@@ -5,7 +5,7 @@ pipeline {
 
     parameters {
         string(name: 'Git-Branch', defaultValue: 'main', description: "Branch to checkout from tf_modules repo")
-        choice(name: 'TF_Module', choices: ['Local', 'prod', 'dev'], description: "Terraform Module to run")
+        string(name: 'TF_Module', defaultValue: 'Local', description: "Terraform Module to run")
         choice(name: 'Terraform-Operation', choices: ['plan', 'apply', 'destroy', 'show'], description: "Terraform operation to run")
     }
 
