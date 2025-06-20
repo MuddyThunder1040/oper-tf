@@ -8,35 +8,65 @@ pipeline {
         string(name: 'TF_Module', defaultValue: 'Local', description: "Terraform Module to run")
         choice(name: 'Terraform-Operation', choices: ['plan', 'apply', 'destroy', 'show'], description: "Terraform operation to run")
     }
-
     stages {
-        stage('Clone Terraform Repo') {
+        stage('Stage 1 - IP Info') {
             steps {
-                deleteDir()
-                git branch: "${params['Git-Branch']}", url: 'https://github.com/MuddyThunder1040/tf_modules.git'
+                sh 'echo "IP Info:"'
+                sh 'hostname -I || ip addr show'
             }
         }
-
-        stage('Run Terraform') {
+        stage('Stage 2 - CPU Info') {
             steps {
-                dir("${params['TF_Module']}") {
-                    script {
-                        def op = params['Terraform-Operation']
-                        sh 'terraform init'
-
-                        if (op == 'plan') {
-                            sh 'terraform plan'
-                        } else if (op == 'apply') {
-                            sh 'terraform apply -auto-approve'
-                        } else if (op == 'destroy') {
-                            sh 'terraform destroy -auto-approve'
-                        } else if (op == 'show') {
-                            sh 'terraform show'
-                        } else {
-                            error "Unsupported Terraform operation: ${op}"
-                        }
-                    }
-                }
+                sh 'echo "CPU Info:"'
+                sh 'lscpu || cat /proc/cpuinfo'
+            }
+        }
+        stage('Stage 3 - Memory Info') {
+            steps {
+                sh 'echo "Memory Info:"'
+                sh 'free -h || cat /proc/meminfo'
+            }
+        }
+        stage('Stage 4 - Disk Usage') {
+            steps {
+                sh 'echo "Disk Usage:"'
+                sh 'df -h'
+            }
+        }
+        stage('Stage 5 - Uptime') {
+            steps {
+                sh 'echo "Uptime:"'
+                sh 'uptime'
+            }
+        }
+        stage('Stage 6 - OS Info') {
+            steps {
+                sh 'echo "OS Info:"'
+                sh 'cat /etc/os-release'
+            }
+        }
+        stage('Stage 7 - Network Interfaces') {
+            steps {
+                sh 'echo "Network Interfaces:"'
+                sh 'ip link show'
+            }
+        }
+        stage('Stage 8 - Running Processes') {
+            steps {
+                sh 'echo "Running Processes:"'
+                sh 'ps aux --sort=-%mem | head -n 10'
+            }
+        }
+        stage('Stage 9 - Open Ports') {
+            steps {
+                sh 'echo "Open Ports:"'
+                sh 'ss -tuln || netstat -tuln'
+            }
+        }
+        stage('Stage 10 - Environment Variables') {
+            steps {
+                sh 'echo "Environment Variables:"'
+                sh 'printenv'
             }
         }
     }
