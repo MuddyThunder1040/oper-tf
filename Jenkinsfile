@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'dell-worker'
+        label 'dell'
     }
 
     parameters {
