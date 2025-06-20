@@ -1,0 +1,61 @@
+pipeline {
+    agent { label 'dell' }
+    stages {
+        stage('Stage 1 - Checkout') {
+            steps {
+                echo 'Checking out source code...'
+            }
+        }
+        stage('Stage 2 - Install Dependencies') {
+            steps {
+                echo 'Installing dependencies...'
+            }
+        }
+        stage('Stage 3 - Lint') {
+            steps {
+                echo 'Running linter...'
+            }
+        }
+        stage('Stage 4 - Unit Test') {
+            steps {
+                echo 'Running unit tests...'
+            }
+        }
+        stage('Stage 5 - Build') {
+            steps {
+                echo 'Building application...'
+            }
+        }
+        stage('Stage 6 - Static Analysis') {
+            steps {
+                echo 'Performing static code analysis...'
+            }
+        }
+        stage('Stage 7 - Security Scan') {
+            steps {
+                echo 'Running security scan...'
+            }
+        }
+        stage('Stage 8 - Integration Test') {
+            steps {
+                echo 'Running integration tests...'
+            }
+        }
+        stage('Stage 9 - Package') {
+            steps {
+                echo 'Packaging application...'
+            }
+        }
+        stage('Stage 10 - Publish Artifacts') {
+            steps {
+                echo 'Publishing artifacts...'
+            }
+        }
+        stage('Stage 11 - Deploy to Dev') {
+            steps {
+                // Add your steps here
+            }
+        }
+        // Continue with the remaining stages as needed
+    }
+}
