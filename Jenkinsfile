@@ -12,4 +12,14 @@ pipeline{
         string(name: 'Git-Branch', defaultValue: 'main', description: "Branch to checkout from tf_modules repo")
         
     }
+    stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    
+                   sh 'Checking out branch: ${params.Git-Branch}'
+                }
+            }
+        }
+    }
 }
